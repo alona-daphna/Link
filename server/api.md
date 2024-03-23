@@ -33,7 +33,13 @@ Math
 
 - **Get anchestor subtree**
   - **input:** Multivariable **output:** [Multivariable, Calculus, Math]
+- **Get entire categoty tree (move to)** (optimize later, first MVP)
+- **Create category**
+- **Get parent category's immediate descendants**
   - **input:** {parent_id: 5, title: Linear Algebra}
+- **Delete cascade**
+  - **input:** id **output:** deletes category as well as subcategories and links
+- **Update title or parent category (move to)**
 
 ### Links
 
@@ -44,3 +50,8 @@ Math
 - **Delete by id**
 - **Create link inside a categorie**
   - **input:** {title: "Chain Rule", url: "http://", categorie_id: 6}
+- **Update title or url**
+
+---
+
+Read on caching
