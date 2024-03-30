@@ -2,9 +2,18 @@ import { Category, PrismaClient } from '@prisma/client';
 import { Request, Response } from 'express';
 
 const prisma = new PrismaClient();
-
-// get all categories under category
 // check delete cascade
+
+export const GetChildCategories = async (req: Request, res: Response) => {
+  const parentId = Number(req.params.id);
+  res.json(
+    await prisma.category.findMany({
+      where: {
+        parentId: parentId == 0 ? null : parentId,
+      },
+    })
+  );
+};
 
 export const GetEntireTree = async (req: Request, res: Response) => {
   res.json({ categories: buildCategoryTree(await prisma.category.findMany()) });
