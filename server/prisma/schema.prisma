@@ -7,17 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id       Int        @id @default(autoincrement())
+  title    String
+  parentId Int?
+  parent   Category?  @relation("ChildCategories", fields: [parentId], references: [id], onDelete: Cascade)
+  children Category[] @relation("ChildCategories")
+  link     Link[]
+}
+
 model Link {
   id         Int      @id @default(autoincrement())
   title      String?
   url        String
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
-}
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, map: "Link_categoryId_fkey")
 
-model Category {
-  id       Int    @id @default(autoincrement())
-  title    String
-  parentId Int?
-  Link     Link[]
+  @@index([categoryId], map: "Link_categoryId_fkey")
 }

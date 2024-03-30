@@ -1,8 +1,7 @@
-import { Category, PrismaClient } from '@prisma/client';
-import { Request, Response } from 'express';
+import { Category, PrismaClient } from "@prisma/client";
+import { Request, Response } from "express";
 
 const prisma = new PrismaClient();
-// check delete cascade
 
 export const GetChildCategories = async (req: Request, res: Response) => {
   const parentId = Number(req.params.id);
