@@ -19,8 +19,8 @@ export const GetEntireTree = async (req: Request, res: Response) => {
 };
 
 export const GetAnchestorPath = async (req: Request, res: Response) => {
-  res.json({
-    anchestors: await prisma.$queryRaw`
+  res.json(
+    await prisma.$queryRaw`
   WITH RECURSIVE cte AS (
     SELECT id, parentId, title
     FROM category
@@ -31,8 +31,9 @@ export const GetAnchestorPath = async (req: Request, res: Response) => {
     JOIN cte ON cte.parentId = parent.id
  )
  SELECT title, id, parentId
- FROM cte;`,
-  });
+ FROM cte
+ ORDER BY id ASC;`
+  );
 };
 
 export const Create = async (req: Request, res: Response) => {
