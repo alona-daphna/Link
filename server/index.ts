@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import linkRouter from "./Routes/Links";
 import categoryRouter from "./Routes/Categories";
 import cors from "cors";
@@ -9,6 +9,13 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
+
+const logRequest = (req: Request, res: Response, next: NextFunction) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+};
+
+app.use(logRequest)
 app.use("/links", linkRouter);
 app.use("/categories", categoryRouter);
 

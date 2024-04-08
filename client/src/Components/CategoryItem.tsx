@@ -8,7 +8,7 @@ type props = {
 
 const CategoryItem = ({ category, setCurrentCategory }: props) => {
   return (
-    <div className="underline" onClick={() => setCurrentCategory(category)}>
+    <div className="underline font-light leading-7 cursor-pointer hover:text-teal-500" onClick={() => setCurrentCategory(category)}>
       {category.title}
     </div>
   );

@@ -3,6 +3,7 @@ import Navbar from "../Components/Navbar";
 import Breadcrumbs from "../Components/Breadcrumbs";
 import { Category } from "../Types/Category";
 import CategoryItem from "../Components/CategoryItem";
+import EnterToCreateInput from "../Components/EnterToCreateInput";
 
 const Home = () => {
   const [rootCategories, setRootCategories] = useState<Category[]>([]);
@@ -37,7 +38,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="w-80 mx-auto mt-12">
+      <div className="w-80 mx-auto mt-12 mb-36">
         <Breadcrumbs
           breadcrumbs={breadcrumbs}
           setCurrentCategory={setCurrentCategory}
@@ -51,6 +52,7 @@ const Home = () => {
             />
           ))}
         </div>
+        <EnterToCreateInput setCategoryList={setRootCategories} currentCategory={currentCategory}/>
       </div>
     </>
   );
