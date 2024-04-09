@@ -13,6 +13,8 @@ const Home = () => {
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const [breadcrumbs, setBreadcrumbs] = useState<Category[]>([]);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await fetch(
@@ -59,6 +61,8 @@ const Home = () => {
               key={category.id}
               category={category}
               setCurrentCategory={setCurrentCategory}
+              isMenuOpen={isMenuOpen}
+              setIsMenuOpen={setIsMenuOpen}
             />
           ))}
         </div>
