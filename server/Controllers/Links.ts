@@ -4,21 +4,19 @@ import { Request, Response } from "express";
 const prisma = new PrismaClient();
 
 export const GetByID = async (req: Request, res: Response) => {
-  res.json({
-    link: await prisma.link.findUnique({
+  res.json(await prisma.link.findUnique({
       where: { id: Number(req.params.id) },
     }),
-  });
+  );
 };
 
 export const GetByCategory = async (req: Request, res: Response) => {
   const { category } = req.params;
 
-  res.json({
-    links: await prisma.link.findMany({
+  res.json(await prisma.link.findMany({
       where: { categoryId: Number(category) },
     }),
-  });
+  );
 };
 
 export const Create = async (req: Request, res: Response) => {
@@ -28,7 +26,7 @@ export const Create = async (req: Request, res: Response) => {
     data: {
       title,
       url,
-      categoryId: Number(category),
+      categoryId: category ? Number(category) : null,
     },
   });
 

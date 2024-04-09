@@ -4,9 +4,12 @@ import Breadcrumbs from "../Components/Breadcrumbs";
 import { Category } from "../Types/Category";
 import CategoryItem from "../Components/CategoryItem";
 import EnterToCreateInput from "../Components/EnterToCreateInput";
+import { Link } from "../Types/Link";
+import LinkItem from "../Components/LinkItem";
 
 const Home = () => {
-  const [rootCategories, setRootCategories] = useState<Category[]>([]);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
+  const [linkList, setLinkList] = useState<Link[]>([]);
   const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
   const [breadcrumbs, setBreadcrumbs] = useState<Category[]>([]);
 
@@ -17,8 +20,13 @@ const Home = () => {
           currentCategory ? currentCategory.id : 0
         }`
       );
-      setRootCategories(await response.json());
+      setCategoryList(await response.json());
     };
+
+    const fetchLinks = async () => {
+      const response = await fetch(`http://localhost:3000/links/category/${currentCategory?.id}`)
+      setLinkList(await response.json())
+    }
 
     const fetchBreadcrumbs = async () => {
       if (currentCategory) {
@@ -32,7 +40,9 @@ const Home = () => {
     };
 
     fetchCategories();
+    fetchLinks();
     fetchBreadcrumbs();
+
   }, [currentCategory]);
 
   return (
@@ -44,7 +54,7 @@ const Home = () => {
           setCurrentCategory={setCurrentCategory}
         />
         <div className="mt-10">
-          {rootCategories.map((category) => (
+          {categoryList.map((category) => (
             <CategoryItem
               key={category.id}
               category={category}
@@ -52,7 +62,12 @@ const Home = () => {
             />
           ))}
         </div>
-        <EnterToCreateInput setCategoryList={setRootCategories} currentCategory={currentCategory}/>
+        <div>
+          {linkList.map(link => (
+            <LinkItem key={link.id} link={link}/>
+          ))}
+        </div>
+        <EnterToCreateInput setLinkList={setLinkList} setCurrentCategory={setCurrentCategory} setCategoryList={setCategoryList} currentCategory={currentCategory}/>
       </div>
     </>
   );

@@ -1,15 +1,38 @@
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from 'react'
 import { Category } from '../Types/Category';
+import { Link } from '../Types/Link';
 
-const EnterToCreateInput = ({currentCategory, setCategoryList}: {currentCategory: Category | null, setCategoryList: Dispatch<SetStateAction<Category[]>>}) => {
+type Props = {
+    currentCategory: Category | null, 
+    setCategoryList: Dispatch<SetStateAction<Category[]>>, 
+    setCurrentCategory: Dispatch<SetStateAction<Category | null>>
+    setLinkList: Dispatch<SetStateAction<Link[]>>
+}
+
+const EnterToCreateInput = ({currentCategory, setCategoryList, setCurrentCategory, setLinkList}: Props) => {
     const [input, setInput] = useState('');
     const [showMenu, setShowMenu] = useState(false)
     const [selectedItem, setSelectedItem] = useState('')
     const [showCategoryInput, setShowCategoryInput] = useState(false)
+    const [showLinkInput, setShowLinkInput] = useState(false);
     const categoryInputRef = useRef<HTMLInputElement | null>(null)
+    const linkInputRef = useRef<HTMLInputElement | null>(null)
+    const menuItems = [{name: 'Link', create: () => setShowLinkInput(true)}, {name: 'Category', create: () => setShowCategoryInput(true)}]
     
-    const createLink = () => {
-        
+    const createLink = async () => {
+        if (linkInputRef.current!.value)
+        {        
+            const response = await fetch('http://localhost:3000/links', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({title: null, url: linkInputRef.current!.value, category: currentCategory?.id || null})
+            })
+            const link: Link = await response.json()
+            setLinkList(x => {return [...x, link]})
+        }
+        setShowLinkInput(false)
     }
     
     const createCategory = async () => {
@@ -23,16 +46,20 @@ const EnterToCreateInput = ({currentCategory, setCategoryList}: {currentCategory
         const category: Category = await response.json();
         setCategoryList(x => {return [...x, category]});
         setShowCategoryInput(false)
+        setCurrentCategory(category)
     }
-    
-    const menuItems = [{name: 'Link', create: createLink}, {name: 'Category', create: createCategory}]
-
 
     useEffect(() => {
         if (showCategoryInput){
             categoryInputRef.current?.focus()
         }
     }, [showCategoryInput])
+
+    useEffect(() => {
+        if (showLinkInput) {
+            linkInputRef.current?.focus()
+        }
+    }, [showLinkInput])
 
     useEffect(() => {
         setShowMenu(false),
@@ -43,7 +70,7 @@ const EnterToCreateInput = ({currentCategory, setCategoryList}: {currentCategory
         if (selectedItem) {
             setShowMenu(false)   
             setInput('')  
-            setShowCategoryInput(true)
+            menuItems.find(item => item.name === selectedItem)?.create()
         }
     }
 
@@ -61,8 +88,8 @@ const EnterToCreateInput = ({currentCategory, setCategoryList}: {currentCategory
     }
 
     return (
-        <>{!showCategoryInput &&
-            <input className="placeholder-neutral-600 py-1 focus:placeholder-transparent focus:outline-0 bg-inherit w-full" 
+        <>{!showCategoryInput && !showLinkInput &&
+            <input className="placeholder-neutral-600 py-1 px-2 focus:placeholder-transparent focus:outline-0 bg-inherit w-full" 
             type="text"
             value={input}
             onChange={(e) => handleInputChange(e.target.value)}
@@ -78,9 +105,23 @@ const EnterToCreateInput = ({currentCategory, setCategoryList}: {currentCategory
                 ))}
             </div>
             }
-               {showCategoryInput && <div>
-                    <input onKeyDown={(e) => {if (e.key === 'Enter') createCategory()}} className='placeholder-neutral-600 focus:outline-0 bg-inherit w-full' ref={categoryInputRef} type="text" placeholder='Category name' />
+            {showCategoryInput && 
+                <div>
+                    <input className='px-2 placeholder-neutral-600 focus:outline-0 bg-inherit w-full' 
+                        ref={categoryInputRef} 
+                        type="text" 
+                        placeholder='Category name'
+                        onKeyDown={(e) => {if (e.key === 'Enter') createCategory()}} />
                 </div>}
+            {showLinkInput && 
+                <div>
+                    <input className='px-2 placeholder-neutral-600 focus:outline-0 bg-inherit w-full'
+                        ref={linkInputRef}
+                        type="text" 
+                        placeholder='Paste link'
+                        onKeyDown={(e) => {if (e.key === 'Enter') createLink()}}/>
+                </div>
+            }
         </>
     )
 }

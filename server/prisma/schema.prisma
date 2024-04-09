@@ -13,15 +13,15 @@ model Category {
   parentId Int?
   parent   Category?  @relation("ChildCategories", fields: [parentId], references: [id], onDelete: Cascade)
   children Category[] @relation("ChildCategories")
-  link     Link[]
+  links     Link[]
 }
 
 model Link {
   id         Int      @id @default(autoincrement())
   title      String?
   url        String
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, map: "Link_categoryId_fkey")
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade, map: "Link_categoryId_fkey")
 
   @@index([categoryId], map: "Link_categoryId_fkey")
 }
