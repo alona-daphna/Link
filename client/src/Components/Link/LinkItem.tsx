@@ -6,10 +6,12 @@ import LinkTooltip from './LinkTooltip';
 const LinkItem = ({ link }: { link: Link }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  let timeoutId: number;
+  let hideTooltipDelay: number;
+  let showTooltipDelay: number;
 
   const handleMouseLeave = () => {
-    timeoutId = setTimeout(() => setShowTooltip(false), 500);
+    clearTimeout(showTooltipDelay);
+    hideTooltipDelay = setTimeout(() => setShowTooltip(false), 500);
   };
 
   return (
@@ -17,7 +19,7 @@ const LinkItem = ({ link }: { link: Link }) => {
       <div
         className="w-full overflow-auto cursor-pointer px-2 py-0.5"
         onMouseEnter={() => {
-          setTimeout(() => {
+          showTooltipDelay = setTimeout(() => {
             setShowTooltip(true);
           }, 500);
         }}
@@ -33,7 +35,7 @@ const LinkItem = ({ link }: { link: Link }) => {
       </div>
       {showTooltip && (
         <LinkTooltip
-          onMouseEnter={() => clearTimeout(timeoutId)}
+          onMouseEnter={() => clearTimeout(hideTooltipDelay)}
           onMouseLeave={handleMouseLeave}
         />
       )}
