@@ -1,7 +1,6 @@
-import React from "react";
-import Logo from "./Logo";
-import Search from "./Search";
-import { MdLightMode } from "react-icons/md";
+import Logo from './Logo';
+import Search from './Search';
+import { MdLightMode } from 'react-icons/md';
 
 const Navbar = () => {
   return (
