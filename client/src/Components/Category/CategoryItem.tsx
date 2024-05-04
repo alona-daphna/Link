@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { Category } from '../Types/Category';
+import { Category } from '../../Types/Category';
 import { BsThreeDots } from 'react-icons/bs';
 import { CgRename } from 'react-icons/cg';
 import { RiDeleteBinLine } from 'react-icons/ri';
-import useOutsideClick from '../Hooks/useOutsideClick';
+import useOutsideClick from '../../Hooks/useOutsideClick';
 
 type props = {
   category: Category;

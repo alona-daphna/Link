@@ -1,7 +1,16 @@
 import React from 'react';
 
-const LinkTooltip = () => {
-  return <div>LinkTooltip</div>;
+interface LinkTooltipProps {
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}
+
+const LinkTooltip = ({ onMouseLeave, onMouseEnter }: LinkTooltipProps) => {
+  return (
+    <div onMouseLeave={onMouseLeave} onMouseEnter={onMouseEnter}>
+      LinkTooltip
+    </div>
+  );
 };
 
 export default LinkTooltip;

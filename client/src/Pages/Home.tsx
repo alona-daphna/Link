@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Navbar from '../Components/Navbar';
 import Breadcrumbs from '../Components/Breadcrumbs';
 import { Category } from '../Types/Category';
-import CategoryItem from '../Components/CategoryItem';
+import CategoryItem from '../Components/Category/CategoryItem';
 import EnterToCreateInput from '../Components/EnterToCreateInput';
 import { Link } from '../Types/Link';
 import LinkItem from '../Components/Link/LinkItem';
