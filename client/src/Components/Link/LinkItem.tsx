@@ -18,9 +18,15 @@ const LinkItem = ({ link }: { link: Link }) => {
     updateLink();
   };
 
-  const updateLink = () => {
+  const updateLink = async () => {
     if ((link.title || link.url) != title || link.url != url) {
-      console.log('saving changes...');
+      await fetch(`http://localhost:3000/links/${link.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ title, url }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     }
   };
 
@@ -65,6 +71,7 @@ const LinkItem = ({ link }: { link: Link }) => {
             setShowEditTooltip(false);
             updateLink();
           }}
+          linkId={link.id}
           title={title}
           setTitle={setTitle}
           url={url}

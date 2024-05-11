@@ -21,13 +21,22 @@ const CategoryItem = ({
   const [showThreeDots, setShowThreeDots] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState(false);
 
-  const deleteCategory = () => {
-    // delete fetch
+  const deleteCategory = async () => {
+    await fetch(`http://localhost:3000/categories/${category.id}`, {
+      method: 'DELETE',
+    });
+    setShowContextMenu(false);
   };
 
-  const updateCategory = () => {
+  const updateCategory = async () => {
     if (category.title != titleRef.current?.textContent) {
-      // update fetch
+      await fetch(`http://localhost:3000/categories/${category.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ title: titleRef.current?.textContent }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     }
   };
 

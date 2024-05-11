@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import useOutsideClick from '../../Hooks/useOutsideClick';
 
 interface LinkTooltipProps {
   hide: () => void;
+  linkId: number;
   title: string;
   url: string;
   setTitle: (value: string) => void;
@@ -11,6 +12,7 @@ interface LinkTooltipProps {
 
 const LinkTooltip = ({
   hide,
+  linkId,
   title,
   url,
   setTitle,
@@ -20,7 +22,10 @@ const LinkTooltip = ({
 
   useOutsideClick([ref], hide);
 
-  const deleteLink = () => {
+  const deleteLink = async () => {
+    await fetch(`http://localhost:3000/links/${linkId}`, {
+      method: 'DELETE',
+    });
     hide();
   };
 
