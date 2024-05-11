@@ -1,17 +1,26 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from '../../Types/Link';
-import LinkEditMenu from './LinkEditMenu';
-import LinkTooltip from './LinkTooltip';
+import LinkTooltip from './LinkEditTooltip';
+import LinkHoverTooltip from './LinkPreviewTooltip';
 
 const LinkItem = ({ link }: { link: Link }) => {
-  const [showMenu, setShowMenu] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
+  const [showPreviewTooltip, setShowPreviewTooltip] = useState(false);
+  const [showEditTooltip, setShowEditTooltip] = useState(false);
+  const [title, setTitle] = useState(link.title || link.url);
+  const [url, setUrl] = useState(link.url);
   let hideTooltipDelay: number;
   let showTooltipDelay: number;
 
   const handleMouseLeave = () => {
-    clearTimeout(showTooltipDelay);
-    hideTooltipDelay = setTimeout(() => setShowTooltip(false), 500);
+    showTooltipDelay && clearTimeout(showTooltipDelay);
+    hideTooltipDelay = setTimeout(() => setShowPreviewTooltip(false), 500);
+    updateLink();
+  };
+
+  const updateLink = () => {
+    if ((link.title || link.url) != title || link.url != url) {
+      console.log('saving changes...');
+    }
   };
 
   return (
@@ -20,7 +29,7 @@ const LinkItem = ({ link }: { link: Link }) => {
         className="w-full overflow-auto cursor-pointer px-2 py-0.5"
         onMouseEnter={() => {
           showTooltipDelay = setTimeout(() => {
-            setShowTooltip(true);
+            setShowPreviewTooltip(true);
           }, 500);
         }}
         onMouseLeave={handleMouseLeave}
@@ -33,13 +42,32 @@ const LinkItem = ({ link }: { link: Link }) => {
           {link.title || link.url}
         </a>
       </div>
-      {showTooltip && (
-        <LinkTooltip
-          onMouseEnter={() => clearTimeout(hideTooltipDelay)}
+      {showPreviewTooltip && (
+        <LinkHoverTooltip
+          showEdit={() => {
+            setShowPreviewTooltip(false);
+            setShowEditTooltip(true);
+          }}
+          onMouseEnter={() => clearTimeout(hideTooltipDelay!)}
           onMouseLeave={handleMouseLeave}
+          hide={() => {
+            setShowPreviewTooltip(false);
+          }}
+          url={link.url}
         />
       )}
-      {showMenu && <LinkEditMenu />}
+      {showEditTooltip && (
+        <LinkTooltip
+          hide={() => {
+            setShowEditTooltip(false);
+            updateLink();
+          }}
+          title={title}
+          setTitle={setTitle}
+          url={url}
+          setUrl={setUrl}
+        />
+      )}
     </>
   );
 };
