@@ -25,7 +25,7 @@ const LinkHoverTooltip = ({
 
   return (
     <div
-      className="absolute flex items-center gap-2 bg-neutral-900 py-1 px-2 rounded-md"
+      className="absolute index-10 flex items-center gap-2 bg-neutral-900 py-1 px-2 rounded-md"
       onMouseLeave={onMouseLeave}
       onMouseEnter={onMouseEnter}
       ref={ref}

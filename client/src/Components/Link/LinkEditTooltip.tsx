@@ -21,7 +21,10 @@ const LinkTooltip = ({
   useOutsideClick([ref], hide);
 
   return (
-    <div className="bg-neutral-900 flex flex-col rounded-md absolute" ref={ref}>
+    <div
+      className="bg-neutral-900 flex flex-col rounded-md absolute index-10"
+      ref={ref}
+    >
       <label className="pl-2 pt-1 text-sm text-neutral-500">URL</label>
       <input
         className="my-2 w-11/12 self-center focus:outline-none bg-neutral-800 rounded-md py-1 px-2"
