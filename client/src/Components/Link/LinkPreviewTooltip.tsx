@@ -25,14 +25,21 @@ const LinkHoverTooltip = ({
 
   return (
     <div
-      className="absolute index-10 flex items-center gap-2 bg-neutral-900 py-1 px-2 rounded-md"
+      className="absolute index-10 grid grid-flow-col gap-1 p-2 bg-neutral-900 rounded-md"
       onMouseLeave={onMouseLeave}
       onMouseEnter={onMouseEnter}
       ref={ref}
     >
-      <p className="w-[100px] overflow-auto text-nowrap">{url}</p>
-      <FaRegCopy onClick={copyToClipboard} className="cursor-pointer text-lg" />
-      <button onClick={showEdit}>Edit</button>
+      <p className="w-[100px] overflow-auto text-nowrap mr-1">{url}</p>
+      <div className="cursor-pointer flex items-center aspect-square justify-center hover:bg-neutral-800 rounded-md">
+        <FaRegCopy onClick={copyToClipboard} />
+      </div>
+      <button
+        onClick={showEdit}
+        className="hover:bg-neutral-800 py-1 px-2 text-sm rounded-md"
+      >
+        Edit
+      </button>
     </div>
   );
 };
