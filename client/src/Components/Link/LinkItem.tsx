@@ -6,6 +6,7 @@ import LinkHoverTooltip from './LinkPreviewTooltip';
 const LinkItem = ({ link }: { link: Link }) => {
   const [showPreviewTooltip, setShowPreviewTooltip] = useState(false);
   const [showEditTooltip, setShowEditTooltip] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [title, setTitle] = useState(link.title || link.url);
   const [url, setUrl] = useState(link.url);
   let hideTooltipDelay: number;
@@ -44,6 +45,8 @@ const LinkItem = ({ link }: { link: Link }) => {
       </div>
       {showPreviewTooltip && (
         <LinkHoverTooltip
+          showSnackbar={showSnackbar}
+          setShowSnackbar={setShowSnackbar}
           showEdit={() => {
             setShowPreviewTooltip(false);
             setShowEditTooltip(true);

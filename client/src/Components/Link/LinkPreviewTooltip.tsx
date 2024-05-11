@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import useOutsideClick from '../../Hooks/useOutsideClick';
 import { FaRegCopy } from 'react-icons/fa6';
+import Snackbar from '../Snackbar';
 
 interface LinkHoverTooltipProps {
   hide: () => void;
@@ -8,6 +9,8 @@ interface LinkHoverTooltipProps {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
   showEdit: () => void;
+  setShowSnackbar: (value: boolean) => void;
+  showSnackbar: boolean;
 }
 
 const LinkHoverTooltip = ({
@@ -16,12 +19,22 @@ const LinkHoverTooltip = ({
   onMouseEnter,
   onMouseLeave,
   showEdit,
+  setShowSnackbar,
+  showSnackbar,
 }: LinkHoverTooltipProps) => {
   const ref = useRef(null);
 
   useOutsideClick([ref], hide);
 
-  const copyToClipboard = () => {};
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(url);
+    setShowSnackbar(true);
+    setTimeout(() => {
+      console.log('copy');
+
+      setShowSnackbar(false);
+    }, 3000);
+  };
 
   return (
     <div
@@ -40,6 +53,7 @@ const LinkHoverTooltip = ({
       >
         Edit
       </button>
+      {showSnackbar && <Snackbar title="Copied link to clipboard" />}
     </div>
   );
 };
