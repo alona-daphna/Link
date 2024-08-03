@@ -68,6 +68,7 @@ const Home = () => {
               key={category.id}
               category={category}
               setCurrentCategory={setCurrentCategory}
+              setCategoryList={setCategoryList}
               isMenuOpen={isMenuOpen}
               setIsMenuOpen={setIsMenuOpen}
             />

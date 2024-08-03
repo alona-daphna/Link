@@ -12,6 +12,7 @@ import {
 type props = {
   category: Category;
   setCurrentCategory: Dispatch<SetStateAction<Category | null>>;
+  setCategoryList: Dispatch<SetStateAction<Category[]>>;
   isMenuOpen: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
 };
@@ -19,6 +20,7 @@ type props = {
 const CategoryItem = ({
   category,
   setCurrentCategory,
+  setCategoryList,
   isMenuOpen,
   setIsMenuOpen,
 }: props) => {
@@ -27,12 +29,20 @@ const CategoryItem = ({
 
   const deleteCategory = async () => {
     await deleteCategoryQuery(category.id);
+    setCategoryList((prevCategoryList) =>
+      prevCategoryList.filter((x) => x.id !== category.id)
+    );
     setShowContextMenu(false);
+    setIsMenuOpen(false);
   };
 
   const updateCategory = async () => {
-    if (category.title != titleRef.current?.textContent) {
-      await updateCategoryQuery(category.id, titleRef.current!.textContent!);
+    if (titleRef.current) {
+      if (category.title != titleRef.current?.textContent) {
+        await updateCategoryQuery(category.id, titleRef.current!.textContent!);
+      }
+      titleRef.current.contentEditable = 'false';
+      setIsMenuOpen(false);
     }
   };
 
