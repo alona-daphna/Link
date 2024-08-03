@@ -18,31 +18,22 @@ const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    console.log({ currentCategory });
-
     const getCategories = async () => {
       const categories = await fetchCategories(
         currentCategory ? currentCategory.id : 0
       );
-
-      console.log('fetched categories', categories);
 
       setCategoryList(categories);
     };
 
     const getLinks = async () => {
       const links = await fetchLinks(currentCategory?.id || null);
-      console.log('fetch links', links);
-
       setLinkList(links);
     };
 
     const getBreadcrumbs = async () => {
       if (currentCategory) {
         const breadcrumbs = await fetchBreadcrumbs(currentCategory.id);
-
-        console.log('fetch breadcrumbs', breadcrumbs);
-
         setBreadcrumbs(breadcrumbs);
       } else {
         setBreadcrumbs([]);
@@ -76,7 +67,7 @@ const Home = () => {
         </div>
         <div>
           {linkList.map((link) => (
-            <LinkItem key={link.id} link={link} />
+            <LinkItem key={link.id} link={link} setLinkList={setLinkList} />
           ))}
         </div>
         <EnterToCreateInput

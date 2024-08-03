@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
 import useOutsideClick from '../../Hooks/useOutsideClick';
-import { deleteLink as deleteLinkQuery } from '../../api/links';
 
 interface LinkTooltipProps {
   hide: () => void;
-  linkId: number;
+  handleDelete: () => void;
   title: string;
   url: string;
   setTitle: (value: string) => void;
@@ -13,7 +12,7 @@ interface LinkTooltipProps {
 
 const LinkTooltip = ({
   hide,
-  linkId,
+  handleDelete,
   title,
   url,
   setTitle,
@@ -22,11 +21,6 @@ const LinkTooltip = ({
   const ref = useRef(null);
 
   useOutsideClick([ref], hide);
-
-  const deleteLink = async () => {
-    await deleteLinkQuery(linkId);
-    hide();
-  };
 
   return (
     <div
@@ -51,7 +45,7 @@ const LinkTooltip = ({
       </div>
       <div
         className="flex justify-center py-2 text-sm text-red-500 cursor-pointer"
-        onClick={deleteLink}
+        onClick={handleDelete}
       >
         delete
       </div>

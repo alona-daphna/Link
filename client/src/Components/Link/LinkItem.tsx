@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Link } from '../../../../shared/Types/Link';
 import LinkTooltip from './LinkEditTooltip';
 import LinkHoverTooltip from './LinkPreviewTooltip';
-import { updateLink as updateLinkQuery } from '../../api/links';
+import {
+  updateLink as updateLinkQuery,
+  deleteLink as deleteLinkQuery,
+} from '../../api/links';
 
-const LinkItem = ({ link }: { link: Link }) => {
+interface LinkItemProps {
+  link: Link;
+  setLinkList: Dispatch<SetStateAction<Link[]>>;
+}
+
+const LinkItem = ({ link, setLinkList }: LinkItemProps) => {
   const [showPreviewTooltip, setShowPreviewTooltip] = useState(false);
   const [showEditTooltip, setShowEditTooltip] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -19,9 +27,22 @@ const LinkItem = ({ link }: { link: Link }) => {
     updateLink();
   };
 
+  const deleteLink = async () => {
+    await deleteLinkQuery(link.id);
+    setShowEditTooltip(false);
+    setLinkList((prevLinkList) => prevLinkList.filter((x) => x.id !== link.id));
+  };
+
   const updateLink = async () => {
     if ((link.title || link.url) != title || link.url != url) {
       await updateLinkQuery(link.id, title, url);
+      setLinkList((prevLinkList) =>
+        prevLinkList.map((x) =>
+          x.id === link.id
+            ? { id: link.id, title, url, categoryId: link.categoryId }
+            : x
+        )
+      );
     }
   };
 
@@ -62,11 +83,8 @@ const LinkItem = ({ link }: { link: Link }) => {
       )}
       {showEditTooltip && (
         <LinkTooltip
-          hide={() => {
-            setShowEditTooltip(false);
-            updateLink();
-          }}
-          linkId={link.id}
+          hide={() => setShowEditTooltip(false)}
+          handleDelete={deleteLink}
           title={title}
           setTitle={setTitle}
           url={url}
