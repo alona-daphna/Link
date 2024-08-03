@@ -1,5 +1,6 @@
-import { Category, PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
+import { PrismaClient } from '@prisma/client';
+import { Request, Response } from 'express';
+import { buildCategoryTree } from '../../shared/treeUtils';
 
 const prisma = new PrismaClient();
 
@@ -66,28 +67,4 @@ export const Delete = async (req: Request, res: Response) => {
       where: { id: Number(req.params.id) },
     })
   );
-};
-
-interface CategoryTreeNode extends Category {
-  children: CategoryTreeNode[];
-}
-
-const buildCategoryTree = (flatCategories: Category[]): Category[] => {
-  const tree: CategoryTreeNode[] = [];
-  const categoryMap: { [id: number]: CategoryTreeNode } = {};
-
-  flatCategories.forEach((category) => {
-    categoryMap[category.id] = { ...category, children: [] };
-  });
-
-  flatCategories.forEach((category) => {
-    if (category.parentId == null) {
-      tree.push(categoryMap[category.id]);
-    } else {
-      const parentNode = categoryMap[category.parentId];
-      parentNode.children.push(categoryMap[category.id]);
-    }
-  });
-
-  return tree;
 };

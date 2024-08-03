@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import useOutsideClick from '../../Hooks/useOutsideClick';
+import { deleteLink as deleteLinkQuery } from '../../api/links';
 
 interface LinkTooltipProps {
   hide: () => void;
@@ -23,9 +24,7 @@ const LinkTooltip = ({
   useOutsideClick([ref], hide);
 
   const deleteLink = async () => {
-    await fetch(`http://localhost:3000/links/${linkId}`, {
-      method: 'DELETE',
-    });
+    await deleteLinkQuery(linkId);
     hide();
   };
 

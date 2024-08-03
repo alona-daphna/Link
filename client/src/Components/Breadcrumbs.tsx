@@ -1,5 +1,5 @@
-import React from "react";
-import { Category } from "../Types/Category";
+import React from 'react';
+import { Category } from '../../../shared/Types/Category';
 
 type props = {
   breadcrumbs: Category[];
@@ -13,7 +13,7 @@ const Breadcrumbs = ({ breadcrumbs, setCurrentCategory }: props) => {
         className="cursor-pointer hover:text-teal-500"
         onClick={() => setCurrentCategory(null)}
       >
-        /{" "}
+        /{' '}
       </span>
       {breadcrumbs.map((category, index) => (
         <span

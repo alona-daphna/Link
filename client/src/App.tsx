@@ -1,10 +1,15 @@
-import Home from "./Pages/Home";
+import Auth from './Components/Auth';
+import Home from './Pages/Home';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-    <>
-      <Home />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Auth />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 

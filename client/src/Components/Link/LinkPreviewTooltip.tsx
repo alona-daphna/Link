@@ -30,8 +30,6 @@ const LinkHoverTooltip = ({
     navigator.clipboard.writeText(url);
     setShowSnackbar(true);
     setTimeout(() => {
-      console.log('copy');
-
       setShowSnackbar(false);
     }, 3000);
   };

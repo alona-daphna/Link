@@ -1,9 +1,13 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Category } from '../../Types/Category';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Category } from '../../../../shared/Types/Category';
 import { BsThreeDots } from 'react-icons/bs';
 import { CgRename } from 'react-icons/cg';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import useOutsideClick from '../../Hooks/useOutsideClick';
+import {
+  deleteCategory as deleteCategoryQuery,
+  updateCategory as updateCategoryQuery,
+} from '../../api/categories';
 
 type props = {
   category: Category;
@@ -22,21 +26,13 @@ const CategoryItem = ({
   const [showContextMenu, setShowContextMenu] = useState(false);
 
   const deleteCategory = async () => {
-    await fetch(`http://localhost:3000/categories/${category.id}`, {
-      method: 'DELETE',
-    });
+    await deleteCategoryQuery(category.id);
     setShowContextMenu(false);
   };
 
   const updateCategory = async () => {
     if (category.title != titleRef.current?.textContent) {
-      await fetch(`http://localhost:3000/categories/${category.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ title: titleRef.current?.textContent }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      await updateCategoryQuery(category.id, titleRef.current!.textContent!);
     }
   };
 

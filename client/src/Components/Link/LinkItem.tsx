@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Link } from '../../Types/Link';
+import { Link } from '../../../../shared/Types/Link';
 import LinkTooltip from './LinkEditTooltip';
 import LinkHoverTooltip from './LinkPreviewTooltip';
+import { updateLink as updateLinkQuery } from '../../api/links';
 
 const LinkItem = ({ link }: { link: Link }) => {
   const [showPreviewTooltip, setShowPreviewTooltip] = useState(false);
@@ -20,13 +21,7 @@ const LinkItem = ({ link }: { link: Link }) => {
 
   const updateLink = async () => {
     if ((link.title || link.url) != title || link.url != url) {
-      await fetch(`http://localhost:3000/links/${link.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ title, url }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      await updateLinkQuery(link.id, title, url);
     }
   };
 

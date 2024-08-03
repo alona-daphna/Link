@@ -1,7 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { Category } from '../Types/Category';
-import { Link } from '../Types/Link';
+import { Category } from '../../../shared/Types/Category';
+import { Link } from '../../../shared/Types/Link';
 import BlockOption from './BlockOption';
+import { createCategory as createCategoryQuery } from '../api/categories';
+import { createLink as createLinkQuery } from '../api/links';
 
 type Props = {
   currentCategory: Category | null;
@@ -30,40 +32,31 @@ const EnterToCreateInput = ({
 
   const createLink = async () => {
     if (linkInputRef.current!.value) {
-      const response = await fetch('http://localhost:3000/links', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: null,
-          url: linkInputRef.current!.value,
-          category: currentCategory?.id || null,
-        }),
-      });
-      const link: Link = await response.json();
-      setLinkList((x) => {
-        return [...x, link];
-      });
+      const link = await createLinkQuery(
+        currentCategory?.id || null,
+        linkInputRef.current!.value,
+        null
+      );
+      if (link) {
+        setLinkList((x) => {
+          return [...x, link];
+        });
+      }
     }
     setShowLinkInput(false);
   };
 
   const createCategory = async () => {
-    const response = await fetch('http://localhost:3000/categories', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: categoryInputRef.current!.value || 'Untitled',
-        parentId: currentCategory?.id || null,
-      }),
-    });
-    const category: Category = await response.json();
-    setCategoryList((x) => {
-      return [...x, category];
-    });
+    const category = await createCategoryQuery(
+      currentCategory?.id || null,
+      categoryInputRef.current!.value || 'Untitled'
+    );
+
+    if (category) {
+      setCategoryList((x) => {
+        return [...x, category];
+      });
+    }
     setShowCategoryInput(false);
     setCurrentCategory(category);
   };
@@ -94,7 +87,7 @@ const EnterToCreateInput = ({
 
   const handleInputChange = (value: string) => {
     const matchingItem = menuItems.find((x) =>
-      x.name.toLowerCase().startsWith(value.slice(1))
+      x.name.toLowerCase().startsWith(value.slice(1).toLocaleLowerCase())
     );
 
     if (value === '/' || (value.startsWith('/') && matchingItem)) {
