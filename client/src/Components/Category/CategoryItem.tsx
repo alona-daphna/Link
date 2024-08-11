@@ -8,6 +8,7 @@ import {
   deleteCategory as deleteCategoryQuery,
   updateCategory as updateCategoryQuery,
 } from '../../api/categories';
+import { useNavigate } from 'react-router-dom';
 
 type props = {
   category: Category;
@@ -26,6 +27,8 @@ const CategoryItem = ({
 }: props) => {
   const [showThreeDots, setShowThreeDots] = useState(false);
   const [showContextMenu, setShowContextMenu] = useState(false);
+
+  const navigate = useNavigate();
 
   const deleteCategory = async () => {
     await deleteCategoryQuery(category.id);
@@ -94,7 +97,10 @@ const CategoryItem = ({
           <span
             ref={titleRef}
             className="grow focus:outline-none"
-            onClick={() => setCurrentCategory(category)}
+            onClick={() => {
+              navigate(`#${category.id}`);
+              setCurrentCategory(category);
+            }}
             onBlur={updateCategory}
           >
             {category.title}

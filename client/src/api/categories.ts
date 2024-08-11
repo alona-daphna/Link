@@ -18,6 +18,33 @@ const getNextId = (): number => {
   return Math.max(...ids) + 1;
 };
 
+const fetchCategoryById = async (
+  categoryId: number
+): Promise<Category | null> => {
+  const authToken = localStorage.getItem('token');
+
+  if (authToken) {
+    const response = await fetch(
+      `http://localhost:3000/categories/${categoryId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const categories = (await response.json()) as Category[];
+      return categories[categories.length - 1];
+    }
+  } else {
+    const categories = getCategoriesFromLocalStorage();
+    return categories.find((x) => x.id === categoryId) ?? null;
+  }
+
+  return null;
+};
+
 const fetchCategories = async (categoryId: number): Promise<Category[]> => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
@@ -144,4 +171,5 @@ export {
   createCategory,
   deleteCategory,
   updateCategory,
+  fetchCategoryById,
 };

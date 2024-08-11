@@ -1,5 +1,6 @@
 import React from 'react';
 import { Category } from '../../../shared/Types/Category';
+import { useNavigate } from 'react-router-dom';
 
 type props = {
   breadcrumbs: Category[];
@@ -7,11 +8,16 @@ type props = {
 };
 
 const Breadcrumbs = ({ breadcrumbs, setCurrentCategory }: props) => {
+  const navigate = useNavigate();
+
   return (
     <div className="text-lg font-mono font-bold">
       <span
         className="cursor-pointer hover:text-teal-500"
-        onClick={() => setCurrentCategory(null)}
+        onClick={() => {
+          navigate('');
+          setCurrentCategory(null);
+        }}
       >
         /{' '}
       </span>
@@ -19,7 +25,10 @@ const Breadcrumbs = ({ breadcrumbs, setCurrentCategory }: props) => {
         <span
           className="cursor-pointer hover:text-teal-500"
           key={category.id}
-          onClick={() => setCurrentCategory(category)}
+          onClick={() => {
+            navigate(`#${category.id}`);
+            setCurrentCategory(category);
+          }}
         >
           {index == 0 ? category.title : ` / ${category.title}`}
         </span>

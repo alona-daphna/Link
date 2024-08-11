@@ -7,7 +7,12 @@ import EnterToCreateInput from '../Components/EnterToCreateInput';
 import { Link } from '../../../shared/Types/Link';
 import LinkItem from '../Components/Link/LinkItem';
 import { fetchLinks } from '../api/links';
-import { fetchBreadcrumbs, fetchCategories } from '../api/categories';
+import {
+  fetchBreadcrumbs,
+  fetchCategories,
+  fetchCategoryById,
+} from '../api/categories';
+import { useLocation } from 'react-router-dom';
 
 const Home = () => {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
@@ -17,33 +22,62 @@ const Home = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const location = useLocation();
+
+  const getCategories = async () => {
+    const categories = await fetchCategories(
+      currentCategory ? currentCategory.id : 0
+    );
+
+    setCategoryList(categories);
+  };
+
+  const getLinks = async () => {
+    const links = await fetchLinks(currentCategory?.id || null);
+    setLinkList(links);
+  };
+
+  const getBreadcrumbs = async () => {
+    if (currentCategory) {
+      const breadcrumbs = await fetchBreadcrumbs(currentCategory.id);
+      setBreadcrumbs(breadcrumbs);
+    } else {
+      setBreadcrumbs([]);
+    }
+  };
+
+  const getCategory = async (id: number) => {
+    const category = await fetchCategoryById(id);
+
+    if (category) {
+      setCurrentCategory(category);
+    }
+  };
+
+  const extractCategoryFromHash = () => {
+    const hash = location.hash.substring(1);
+    const categoryId = hash === '' ? NaN : Number(hash);
+
+    if (!isNaN(categoryId)) {
+      getCategory(categoryId);
+    } else {
+      setCurrentCategory(null);
+    }
+  };
+
   useEffect(() => {
-    const getCategories = async () => {
-      const categories = await fetchCategories(
-        currentCategory ? currentCategory.id : 0
-      );
-
-      setCategoryList(categories);
-    };
-
-    const getLinks = async () => {
-      const links = await fetchLinks(currentCategory?.id || null);
-      setLinkList(links);
-    };
-
-    const getBreadcrumbs = async () => {
-      if (currentCategory) {
-        const breadcrumbs = await fetchBreadcrumbs(currentCategory.id);
-        setBreadcrumbs(breadcrumbs);
-      } else {
-        setBreadcrumbs([]);
-      }
-    };
-
     getCategories();
     getLinks();
     getBreadcrumbs();
   }, [currentCategory]);
+
+  useEffect(() => {
+    extractCategoryFromHash();
+  }, [location]);
+
+  useEffect(() => {
+    extractCategoryFromHash();
+  }, []);
 
   return (
     <>
