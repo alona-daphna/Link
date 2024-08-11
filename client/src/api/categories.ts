@@ -1,6 +1,8 @@
 import { Category } from '../../../shared/Types/Category';
 import { getAnchestorPath } from '../../../shared/treeUtils';
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 const getCategoriesFromLocalStorage = (): Category[] => {
   return JSON.parse(localStorage.getItem('categories') || '[]');
 };
@@ -24,14 +26,11 @@ const fetchCategoryById = async (
   const authToken = localStorage.getItem('token');
 
   if (authToken) {
-    const response = await fetch(
-      `http://localhost:3000/categories/${categoryId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}categories/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
 
     if (response.ok) {
       const categories = (await response.json()) as Category[];
@@ -48,14 +47,11 @@ const fetchCategoryById = async (
 const fetchCategories = async (categoryId: number): Promise<Category[]> => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
-    const response = await fetch(
-      `http://localhost:3000/categories/in/${categoryId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}categories/in/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
 
     if (response.ok) {
       return await response.json();
@@ -73,14 +69,11 @@ const fetchCategories = async (categoryId: number): Promise<Category[]> => {
 const fetchBreadcrumbs = async (categoryId: number): Promise<Category[]> => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
-    const response = await fetch(
-      `http://localhost:3000/categories/${categoryId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
+    const response = await fetch(`${BASE_URL}categories/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
 
     if (response.ok) {
       return await response.json();
@@ -99,7 +92,7 @@ const createCategory = async (
 ): Promise<Category | null> => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
-    const response = await fetch('http://localhost:3000/categories', {
+    const response = await fetch(`${BASE_URL}categories`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -132,7 +125,7 @@ const createCategory = async (
 const deleteCategory = async (id: number) => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
-    await fetch(`http://localhost:3000/categories/${id}`, {
+    await fetch(`${BASE_URL}categories/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${authToken}`,
@@ -147,7 +140,7 @@ const deleteCategory = async (id: number) => {
 const updateCategory = async (id: number, title: string) => {
   const authToken = localStorage.getItem('token');
   if (authToken) {
-    await fetch(`http://localhost:3000/categories/${id}`, {
+    await fetch(`${BASE_URL}categories/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ title }),
       headers: {
