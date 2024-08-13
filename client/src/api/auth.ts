@@ -6,7 +6,7 @@ const setItemAsync = (key: string, value: string): Promise<void> => {
 };
 
 export default async (username: string, password: string) => {
-  const response = await fetch('http://localhost:3000/auth', {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}auth`, {
     method: 'POST',
     body: JSON.stringify({
       username,
