@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef } from 'react';
 import useOutsideClick from '../../Hooks/useOutsideClick';
 import { FaRegCopy } from 'react-icons/fa6';
 import Snackbar from '../Snackbar';

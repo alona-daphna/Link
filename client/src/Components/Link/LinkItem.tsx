@@ -18,8 +18,8 @@ const LinkItem = ({ link, setLinkList }: LinkItemProps) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [title, setTitle] = useState(link.title || link.url);
   const [url, setUrl] = useState(link.url);
-  let hideTooltipDelay: number;
-  let showTooltipDelay: number;
+  let hideTooltipDelay: NodeJS.Timeout;
+  let showTooltipDelay: NodeJS.Timeout;
 
   const handleMouseLeave = () => {
     showTooltipDelay && clearTimeout(showTooltipDelay);

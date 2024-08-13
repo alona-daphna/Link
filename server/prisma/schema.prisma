@@ -21,7 +21,7 @@ model Link {
   title      String?
   url        String
   categoryId Int?
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade, map: "Link_categoryId_fkey")
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade, map: "link_categoryId_fkey")
 
-  @@index([categoryId], map: "Link_categoryId_fkey")
+  @@index([categoryId], map: "link_categoryId_fkey")
 }
